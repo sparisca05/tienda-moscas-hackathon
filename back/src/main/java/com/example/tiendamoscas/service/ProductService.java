@@ -15,8 +15,8 @@ public class ProductService {
     @Autowired
     private final ProductRepository productRepository;
 
-    public Product saveProduct(Product product){
-        return productRepository.save(product);
+    public void saveProduct(Product product){
+        productRepository.save(product);
     }
 
     public Product getProductById(Long productId){
@@ -24,8 +24,8 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
     }
 
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
+    public Product getProductByName(String productName){
+        return productRepository.findByNombre(productName);
     }
 
     public Product updateProductById(Product request, Long productId){

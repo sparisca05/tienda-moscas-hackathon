@@ -23,7 +23,7 @@ public class Inventory {
     private Product product;
 
     @Column(nullable = false)
-    private Integer cantidad = 0;
+    private Integer cantidad;
 
     @Column(name = "ultima_actualizacion")
     private LocalDateTime ultimaActualizacion = LocalDateTime.now();

@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -20,17 +22,26 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_orden", nullable = false)
-    private Order orden;
+    @OneToMany()
+    @JoinTable(
+            name = "producto_orden",
+            joinColumns = @JoinColumn(name = "orden_id"),
+            inverseJoinColumns = @JoinColumn(name = "producto_id")
+    )
+    private List<Product> productos = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "id_producto", nullable = false)
-    private Product producto;
+    public double getTotal() {
+        if (productos == null) {
+            return 0;
+        }
+        return productos.stream()
+                .mapToDouble(Product::getPrecio)
+                .sum();
+    }
 
     @Column(nullable = false)
-    private Integer cantidad;
+    private double total = getTotal();
 
-    @Column(name = "precio_unitario", nullable = false)
-    private BigDecimal precioUnitario;
+    @Column(nullable = false)
+    private LocalDateTime fecha = LocalDateTime.now();
 }

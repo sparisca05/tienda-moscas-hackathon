@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,30 +15,40 @@ public class InventoryService {
 
     @Autowired
     private final InventoryRepository inventoryRepository;
+    private final ProductService productService;
 
-    public Inventory saveInventory(Inventory inventory){
+    public void saveInventory(Inventory inventory){
+        inventoryRepository.save(inventory);
+    }
+
+    public Inventory createProduct(Inventory inventory){
+        productService.saveProduct(inventory.getProduct());
         return inventoryRepository.save(inventory);
     }
 
-    public Inventory getInventoryById(Long inventoryId) {
-        return inventoryRepository.findById(inventoryId)
-                .orElseThrow(() -> new RuntimeException("Inventario no encontrado"));
+    public List<Inventory> getAllInventory(){
+        return inventoryRepository.findAll();
     }
 
-    public Inventory updateInventoryById(Inventory request, Long inventoryId) {
-        Inventory inventory = inventoryRepository.findById(inventoryId).get();
+    public Inventory getProductInventoryById(Long productId) {
+        return inventoryRepository.findByProductId(productId)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+    }
 
-        inventory.setProduct(request.getProduct());
-        inventory.setCantidad(request.getCantidad());
+    public Inventory updateInventoryById(Long productId, Integer cantidad) {
+        Inventory inventory = getProductInventoryById(productId);
+
+        inventory.setCantidad(inventory.getCantidad() + cantidad);
         inventory.setUltimaActualizacion(LocalDateTime.now());
         saveInventory(inventory);
 
         return inventory;
     }
 
-    public String deleteInventory(Long inventoryId) {
+    public String deleteInventory(Long productId) {
         try {
-            inventoryRepository.deleteById(inventoryId);
+            inventoryRepository.deleteById(getProductInventoryById(productId).getId());
+            productService.deleteProduct(productId);
             return "Inventario eliminado";
         } catch (Exception e) {
             return "Error al eliminar inventario";

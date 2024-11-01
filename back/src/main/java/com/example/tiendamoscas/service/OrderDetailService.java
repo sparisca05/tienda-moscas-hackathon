@@ -13,7 +13,11 @@ public class OrderDetailService {
     @Autowired
     private final OrderDetailRepository orderDetailRepository;
 
-    public OrderDetail saveOrderDetail(OrderDetail orderDetail){
+    public OrderDetail saveOrderDetail(OrderDetail request){
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setId(request.getId());
+        orderDetail.setProductos(request.getProductos());
+        orderDetail.setTotal(request.getTotal());
         orderDetailRepository.save(orderDetail);
         return orderDetail;
     }
@@ -23,12 +27,4 @@ public class OrderDetailService {
                 .orElseThrow(() -> new RuntimeException("Detalle de orden no encontrado"));
     }
 
-    public String deleteOrderDetail(Long orderDetailId) {
-        try {
-            orderDetailRepository.deleteById(orderDetailId);
-            return "Detalle de orden eliminado";
-        } catch (Exception e) {
-            return "Error al eliminar detalle de orden";
-        }
-    }
 }
