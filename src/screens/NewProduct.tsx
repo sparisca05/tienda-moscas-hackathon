@@ -1,5 +1,6 @@
 // src/screens/NewProduct.tsx
 import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -8,14 +9,26 @@ const NewProduct: React.FC = () => {
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
   const [cantidad, setCantidad] = useState("");
+  const product = {
+    nombre: nombre,
+    precio: parseFloat(precio),
+  };
 
   const handleAddProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ nombre, precio: parseFloat(precio), cantidad: parseInt(cantidad) });
-    setNombre("");
-    setPrecio("");
-    setCantidad("");
-    navigate("/inventario");
+
+    axios
+      .post("http://localhost:8080/inventario", {
+        product,
+        cantidad: parseInt(cantidad),
+      })
+      .then(() => {
+        alert("Producto agregado correctamente");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (

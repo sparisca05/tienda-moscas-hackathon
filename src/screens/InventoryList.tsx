@@ -1,61 +1,56 @@
 // src/screens/InventoryList.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-interface ProductInventory {
-  inventario_id: number;
-  producto_id: number;
+export interface Product {
+  id: number;
   nombre: string;
   precio: number;
+}
+
+interface ProductInventory {
+  id: number;
+  product: Product;
   cantidad: number;
-  fecha_actualizacion: string;
+  ultimaActualizacion: string;
 }
 
 const InventoryList: React.FC = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [inventory, setInventory] = useState<ProductInventory[]>([
-    {
-      inventario_id: 1,
-      producto_id: 1,
-      nombre: "Producto A",
-      precio: 100,
-      cantidad: 20,
-      fecha_actualizacion: "2024-10-31",
-    },
-    {
-      inventario_id: 2,
-      producto_id: 2,
-      nombre: "Producto B",
-      precio: 200,
-      cantidad: 5,
-      fecha_actualizacion: "2024-10-30",
-    },
-    {
-      inventario_id: 3,
-      producto_id: 3,
-      nombre: "Producto C",
-      precio: 150,
-      cantidad: 10,
-      fecha_actualizacion: "2024-10-29",
-    },
-    {
-      inventario_id: 4,
-      producto_id: 4,
-      nombre: "Producto D",
-      precio: 300,
-      cantidad: 15,
-      fecha_actualizacion: "2024-10-28",
-    },
-  ]);
+  const [inventory, setInventory] = useState<ProductInventory[]>([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/inventario")
+      .then(response => {
+        setInventory(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleDeletion = (id: number) => {
+    axios
+      .delete(`http://localhost:8080/inventario/${id}`)
+      .then(() => {
+        alert("Producto eliminado correctamente");
+        setInventory(inventory.filter(item => item.id !== id));
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
   const filteredInventory = inventory.filter(item =>
-    item.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    item.product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -100,24 +95,24 @@ const InventoryList: React.FC = () => {
             <tbody>
               {filteredInventory.map((item, index) => (
                 <motion.tr
-                  key={item.inventario_id}
+                  key={item.id}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: index * 0.1 }}
                   className="text-left hover:bg-gray-50"
                 >
-                  <td className="py-2 px-4 border-b">{item.nombre}</td>
-                  <td className="py-2 px-4 border-b">${item.precio}</td>
+                  <td className="py-2 px-4 border-b">{item.product.nombre}</td>
+                  <td className="py-2 px-4 border-b">${item.product.precio}</td>
                   <td className="py-2 px-4 border-b">{item.cantidad}</td>
-                  <td className="py-2 px-4 border-b">{item.fecha_actualizacion}</td>
+                  <td className="py-2 px-4 border-b">{item.ultimaActualizacion.slice(0, 10)}</td>
                   <td className="py-2 px-4 border-b flex space-x-2">
                     <button
-                      onClick={() => navigate("/producto", { state: item })}
+                      onClick={() => navigate("/producto", { state: {id: item.product.id} })}
                       className="text-blue-500 hover:underline"
                     >
                       Editar
                     </button>
-                    <button className="text-red-500 hover:underline">Eliminar</button>
+                    <button className="text-red-500 hover:underline" onClick={() => handleDeletion(item.product.id)}>Eliminar</button>
                   </td>
                 </motion.tr>
               ))}

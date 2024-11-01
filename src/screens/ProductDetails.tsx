@@ -1,24 +1,27 @@
 // src/screens/ProductDetails.tsx
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
-interface ProductInventory {
-  inventario_id: number;
-  producto_id: number;
-  nombre: string;
-  precio: number;
-  cantidad: number;
-  fecha_actualizacion: string;
-}
-
-const ProductDetails: React.FC = () => {
+const ProductDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const product: ProductInventory = location.state as ProductInventory;
+  const id = location.state.id;
+  const [nombre, setNombre] = useState("");
+  const [precio, setPrecio] = useState(0);
 
-  const [nombre, setNombre] = useState(product.nombre);
-  const [precio, setPrecio] = useState(product.precio);
+  useEffect (() => {
+    axios
+      .get("http://localhost:8080/producto/" + id)
+      .then(response => {
+        setNombre(response.data.nombre);
+        setPrecio(response.data.precio);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
