@@ -39,4 +39,10 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.updateInventoryById(productId, cantidad));
     }
 
+    // Delete product
+    @DeleteMapping("{productId}")
+    public String deleteProduct(@PathVariable Long productId) {
+        return inventoryService.deleteInventory(productId);
+    }
+
 }

@@ -32,9 +32,5 @@ public class ProductController {
         return productService.updateProductById(product, productId);
     }
 
-    // Delete product
-    @DeleteMapping("{productId}")
-    public String deleteProduct(@PathVariable Long productId) {
-        return productService.deleteProduct(productId);
-    }
+    // Delete product is not needed in this case, it's used in the InventoryController
 }

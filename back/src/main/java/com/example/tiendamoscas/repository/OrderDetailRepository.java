@@ -8,5 +8,5 @@ import org.springframework.data.repository.query.Param;
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
     @Query(value = "SELECT COUNT(t.producto_id) as cantidad FROM producto_orden t WHERE t.orden_id = :id_orden AND t.producto_id = :id_producto", nativeQuery = true)
-    OrderDetail cantProductoEnOrden(@Param("id_orden") Long idOrden, @Param("id_producto") Long idProducto);
+    int cantProductoEnOrden(@Param("id_orden") Long idOrden, @Param("id_producto") Long idProducto);
 }

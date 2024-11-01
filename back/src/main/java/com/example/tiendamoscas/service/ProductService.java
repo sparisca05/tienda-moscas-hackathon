@@ -40,6 +40,7 @@ public class ProductService {
 
     public String deleteProduct(Long productId) {
         try {
+
             productRepository.deleteById(productId);
             return "Producto eliminado";
         } catch (Exception e) {
