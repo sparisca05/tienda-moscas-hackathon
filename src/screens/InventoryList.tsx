@@ -24,7 +24,7 @@ const InventoryList: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/inventario")
+      .get("https://tienda-moscas-hackathon.onrender.com/inventario")
       .then(response => {
         setInventory(response.data);
       })
@@ -35,7 +35,7 @@ const InventoryList: React.FC = () => {
 
   const handleDeletion = (id: number) => {
     axios
-      .delete(`http://localhost:8080/inventario/${id}`)
+      .delete(`https://tienda-moscas-hackathon.onrender.com/inventario/${id}`)
       .then(() => {
         alert("Producto eliminado correctamente");
         setInventory(inventory.filter(item => item.id !== id));

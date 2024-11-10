@@ -13,7 +13,7 @@ const ProductDetails = () => {
 
   useEffect (() => {
     axios
-      .get("http://localhost:8080/producto/" + id)
+      .get("https://tienda-moscas-hackathon.onrender.com/producto/" + id)
       .then(response => {
         setNombre(response.data.nombre);
         setPrecio(response.data.precio);

@@ -18,7 +18,7 @@ const NewProduct: React.FC = () => {
     e.preventDefault();
 
     axios
-      .post("http://localhost:8080/inventario", {
+      .post("https://tienda-moscas-hackathon.onrender.com/inventario", {
         product,
         cantidad: parseInt(cantidad),
       })

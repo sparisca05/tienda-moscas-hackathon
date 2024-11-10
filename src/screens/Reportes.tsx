@@ -15,8 +15,8 @@ const Reportes: React.FC = () => {
     { nombre: "Producto F", precio: 150, cantidad: 4 },
     { nombre: "Producto G", precio: 90, cantidad: 5 },
     { nombre: "Producto H", precio: 120, cantidad: 6 },
-    { nombre: "Producto I", precio: 250, cantidad: 8 },
-    { nombre: "Producto J", precio: 180, cantidad: 10 },
+    { nombre: "Producto I", precio: 250, cantidad: 2 },
+    { nombre: "Producto J", precio: 180, cantidad: 2 },
     { nombre: "Producto K", precio: 60, cantidad: 3 },
     { nombre: "Producto L", precio: 300, cantidad: 1 },
   ];
