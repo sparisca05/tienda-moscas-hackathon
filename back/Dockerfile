@@ -7,6 +7,7 @@ COPY .mvn /back/.mvn
 COPY mvnw /back
 COPY .env /back
 
+RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
 
 # COPIAR EL CODIGO FUENTE DENTRO DEL CONTENEDOR
